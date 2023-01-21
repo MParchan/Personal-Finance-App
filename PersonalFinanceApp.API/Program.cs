@@ -5,8 +5,12 @@ using Microsoft.OpenApi.Models;
 using PersonalFinanceApp.Repository.Data;
 using PersonalFinanceApp.Repository.Entities;
 using PersonalFinanceApp.Repository.Repositories;
+using PersonalFinanceApp.Repository.Repositories.ExpenditureCategoryRepository;
+using PersonalFinanceApp.Repository.Repositories.IncomeCategoryRepository;
 using PersonalFinanceApp.Repository.Repositories.UserRepository;
 using PersonalFinanceApp.Service.Services.AuthService;
+using PersonalFinanceApp.Service.Services.ExpenditureCategoryService;
+using PersonalFinanceApp.Service.Services.IncomeCategoryService;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -49,10 +53,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IIncomeCategoryRepository, IncomeCategoryRepository>();
+builder.Services.AddScoped<IExpenditureCategoryRepository, ExpenditureCategoryRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>();
+builder.Services.AddScoped<IExpenditureCategoryService, ExpenditureCategoryService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+
+app.UseCors(options => options.WithOrigins("http://localhost:3000")
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

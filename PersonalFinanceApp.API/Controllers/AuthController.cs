@@ -51,7 +51,7 @@ namespace PersonalFinanceApp.API.Controllers
             string accessToken = _authService.CreateToken(user);
             var refreshToken = GenerateRefreshToken();
             SetRefreshToken(refreshToken, user.UserId);
-            return Ok(new { accessToken, email });
+            return Ok(new { accessToken });
         }
 
         [HttpPost("RefreshToken")]
@@ -83,7 +83,7 @@ namespace PersonalFinanceApp.API.Controllers
             var refreshToken = new RefreshToken
             {
                 Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(5),
                 Created = DateTime.Now
             };
             return refreshToken;

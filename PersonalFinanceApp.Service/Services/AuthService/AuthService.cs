@@ -97,5 +97,10 @@ namespace PersonalFinanceApp.Service.Services.AuthService
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
+
+        public bool UserExists(string email)
+        {
+            return _userRepository.Exists(email);
+        }
     }
 }

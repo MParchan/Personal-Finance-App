@@ -16,6 +16,6 @@ namespace PersonalFinanceApp.Service.Services.AuthService
         public void SetRefreshTokenToUser(int userId, string token, DateTime created, DateTime expires);
         public abstract bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt);
         public string CreateToken(UserDto user);
-
+        public bool UserExists(string email);
     }
 }
