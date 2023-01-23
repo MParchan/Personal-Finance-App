@@ -6,11 +6,15 @@ using PersonalFinanceApp.Repository.Data;
 using PersonalFinanceApp.Repository.Entities;
 using PersonalFinanceApp.Repository.Repositories;
 using PersonalFinanceApp.Repository.Repositories.ExpenditureCategoryRepository;
+using PersonalFinanceApp.Repository.Repositories.ExpenditureRepository;
 using PersonalFinanceApp.Repository.Repositories.IncomeCategoryRepository;
+using PersonalFinanceApp.Repository.Repositories.IncomeRepository;
 using PersonalFinanceApp.Repository.Repositories.UserRepository;
 using PersonalFinanceApp.Service.Services.AuthService;
 using PersonalFinanceApp.Service.Services.ExpenditureCategoryService;
+using PersonalFinanceApp.Service.Services.ExpenditureService;
 using PersonalFinanceApp.Service.Services.IncomeCategoryService;
+using PersonalFinanceApp.Service.Services.IncomeService;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -55,9 +59,13 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IIncomeCategoryRepository, IncomeCategoryRepository>();
 builder.Services.AddScoped<IExpenditureCategoryRepository, ExpenditureCategoryRepository>();
+builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
+builder.Services.AddScoped<IExpenditureRepository, ExpenditureRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IIncomeCategoryService, IncomeCategoryService>();
 builder.Services.AddScoped<IExpenditureCategoryService, ExpenditureCategoryService>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddScoped<IExpenditureService, ExpenditureService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();

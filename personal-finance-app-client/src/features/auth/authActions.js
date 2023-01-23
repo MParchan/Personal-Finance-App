@@ -45,6 +45,30 @@ export const userLogin = createAsyncThunk(
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + data.accessToken;
       const token = jwtDecode(data.accessToken);
+      return token;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const userRefreshToken = createAsyncThunk(
+  "auth/refreshToken",
+  async ({ email }, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        API_URL + "/RefreshToken",
+        { email },
+        config
+      );
+      axios.defaults.headers.common["Authorization"] =
+        "Bearer " + data.accessToken;
+      const token = jwtDecode(data.accessToken);
       return token[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
       ];

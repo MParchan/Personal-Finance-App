@@ -39,8 +39,16 @@ namespace PersonalFinanceApp.Service.Services.IncomeCategoryService
             var results = _incomeCategoryRepository.GetUserCategories(id).ToList();
             return _mapper.Map<List<IncomeCategoryDto>>(results);
         }
-        public void AddIncomeCategory(IncomeCategoryDto incomeCategory)
+        public void AddIncomeCategory(string email, IncomeCategoryDto incomeCategory)
         {
+            if (email == null)
+            {
+                incomeCategory.UserId = -1;
+            }
+            else
+            {
+                incomeCategory.UserId = _authService.GetUserIdByEmail(email);
+            }
             _incomeCategoryRepository.Add(_mapper.Map<IncomeCategory>(incomeCategory));
         }
         public void RemoveIncomeCategory(int id)

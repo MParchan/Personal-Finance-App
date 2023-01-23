@@ -47,7 +47,6 @@ namespace PersonalFinanceApp.API.Controllers
             {
                 return BadRequest("Wrong password");
             }
-            string email = user.Email;
             string accessToken = _authService.CreateToken(user);
             var refreshToken = GenerateRefreshToken();
             SetRefreshToken(refreshToken, user.UserId);
@@ -57,11 +56,11 @@ namespace PersonalFinanceApp.API.Controllers
         [HttpPost("RefreshToken")]
         public ActionResult<string> RefreshToken(string email)
         {
-            var user = _authService.GetUserByEmail(email);
-            if (user == null)
+            if (!_authService.UserExists(email))
             {
                 return BadRequest("User not exist");
             }
+            var user = _authService.GetUserByEmail(email);
             var refreshToken = Request.Cookies["refreshToken"];
             if (!user.RefreshToken.Equals(refreshToken))
             {
@@ -71,11 +70,11 @@ namespace PersonalFinanceApp.API.Controllers
             {
                 return Unauthorized("Token expired.");
             }
-            string token = _authService.CreateToken(user);
+            string accessToken = _authService.CreateToken(user);
             var newRefreshToken = GenerateRefreshToken();
             var userId = user.UserId;
             SetRefreshToken(newRefreshToken, userId);
-            return Ok(new { token, email });
+            return Ok(new { accessToken });
         }
 
         private static RefreshToken GenerateRefreshToken()

@@ -1,10 +1,5 @@
 function IndexPage() {
-  return (
-    <div>
-      Hey
-      <ul></ul>
-    </div>
-  );
+  return <div>Hey not user</div>;
 }
 
 export default IndexPage;

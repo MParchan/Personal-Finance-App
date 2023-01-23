@@ -15,8 +15,5 @@ namespace PersonalFinanceApp.Repository.Entities
         public int UserId { get; set; }
         public string Price { get; set; }
         public string Comment { get; set; }
-
-        public virtual IncomeCategory IncomeCategory { get; set; }
-        public virtual User User { get; set; }
     }
 }

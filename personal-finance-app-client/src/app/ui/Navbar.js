@@ -40,6 +40,13 @@ export default function Navbar() {
               Financial app
             </Link>
           </Typography>
+          <Button
+            component={Link}
+            to={"/help"}
+            style={{ color: "inherit", textDecoration: "inherit" }}
+          >
+            Help
+          </Button>
           {logged ? (
             <Button
               component={Link}

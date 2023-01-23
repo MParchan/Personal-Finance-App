@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceApp.API.ViewModels;
-using PersonalFinanceApp.Repository.Entities;
 using PersonalFinanceApp.Service.DTOs;
 using PersonalFinanceApp.Service.Services.AuthService;
 using PersonalFinanceApp.Service.Services.IncomeCategoryService;
@@ -11,6 +11,7 @@ namespace PersonalFinanceApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class IncomeCategoriesController : Controller
     {
         private readonly IIncomeCategoryService _incomeCategoryService;
@@ -45,14 +46,14 @@ namespace PersonalFinanceApp.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<IncomeCategoryViewModel> GetIncomeCategory(int id)
         {
-            var brand = _incomeCategoryService.GetIncomeCategoryById(id);
+            var incomeCategory = _incomeCategoryService.GetIncomeCategoryById(id);
 
-            if (brand == null)
+            if (incomeCategory == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<IncomeCategoryViewModel>(brand);
+            return _mapper.Map<IncomeCategoryViewModel>(incomeCategory);
         }
 
         [HttpPut("{id}")]
@@ -81,9 +82,9 @@ namespace PersonalFinanceApp.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IncomeCategoryViewModel> PostIncomeCategory(IncomeCategoryViewModel incomeCategory)
+        public ActionResult<IncomeCategoryViewModel> PostIncomeCategory(string email, IncomeCategoryViewModel incomeCategory)
         {
-            _incomeCategoryService.AddIncomeCategory(_mapper.Map<IncomeCategoryDto>(incomeCategory));
+            _incomeCategoryService.AddIncomeCategory(email, _mapper.Map<IncomeCategoryDto>(incomeCategory));
 
             return CreatedAtAction("GetIncomeCategory", new { id = incomeCategory.IncomeCategoryId }, incomeCategory);
         }
@@ -91,8 +92,8 @@ namespace PersonalFinanceApp.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteIncomeCategory(int id)
         {
-            var brand = _incomeCategoryService.GetIncomeCategoryById(id);
-            if (brand == null)
+            var incomeCategory = _incomeCategoryService.GetIncomeCategoryById(id);
+            if (incomeCategory == null)
             {
                 return NotFound();
             }

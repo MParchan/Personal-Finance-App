@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userLogin, userLogout, userRegistration } from "./authActions";
+import {
+  userLogin,
+  userLogout,
+  userRefreshToken,
+  userRegistration,
+} from "./authActions";
 
 const initialState = {
   loading: false,
   userEmail: null,
+  tokenExp: null,
   registerError: null,
   loginError: null,
   registerSuccess: false,
@@ -46,9 +52,28 @@ const authSlice = createSlice({
       .addCase(userLogin.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.logged = true;
-        state.userEmail = payload;
+        state.userEmail =
+          payload[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+          ];
+        state.tokenExp = payload["exp"];
       })
       .addCase(userLogin.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.loginError = payload;
+      })
+
+      //refresh token
+      .addCase(userRefreshToken.pending, (state) => {
+        state.loading = true;
+        state.loginError = null;
+      })
+      .addCase(userRefreshToken.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.logged = true;
+        state.userEmail = payload;
+      })
+      .addCase(userRefreshToken.rejected, (state, { payload }) => {
         state.loading = false;
         state.loginError = payload;
       })

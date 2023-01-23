@@ -16,6 +16,12 @@ namespace PersonalFinanceApp.API.ViewModels
 
             CreateMap<ExpenditureCategory, ExpenditureCategoryDto>().ReverseMap();
             CreateMap<ExpenditureCategoryViewModel, ExpenditureCategoryDto>().ReverseMap();
+
+            CreateMap<Income, IncomeDto>().ReverseMap();
+            CreateMap<IncomeViewModel, IncomeDto>().ReverseMap();
+
+            CreateMap<Expenditure, ExpenditureDto>().ReverseMap();
+            CreateMap<ExpenditureViewModel, ExpenditureDto>().ReverseMap();
         }
     }
 }
