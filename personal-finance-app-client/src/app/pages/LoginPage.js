@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../features/auth/authActions";
-import { resetLogin } from "../../features/auth/authSlice";
+import { resetAuth } from "../../features/auth/authSlice";
 
 function LoginPage() {
   const { loading, loginError } = useSelector((state) => state.auth);
@@ -11,10 +11,10 @@ function LoginPage() {
   const { register, handleSubmit } = useForm();
 
   useEffect(() => {
-    dispatch(resetLogin());
+    dispatch(resetAuth());
   }, [dispatch]);
 
-  const handleLogin = (data) => {
+  const handleLogin = async (data) => {
     dispatch(userLogin(data));
   };
 

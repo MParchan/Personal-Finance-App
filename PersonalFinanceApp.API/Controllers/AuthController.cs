@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonalFinanceApp.API.ViewModels;
 using PersonalFinanceApp.Repository.Entities;
 using PersonalFinanceApp.Service.Services.AuthService;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace PersonalFinanceApp.API.Controllers
@@ -48,20 +49,20 @@ namespace PersonalFinanceApp.API.Controllers
                 return BadRequest("Wrong password");
             }
             string accessToken = _authService.CreateToken(user);
-            var refreshToken = GenerateRefreshToken();
-            SetRefreshToken(refreshToken, user.UserId);
-            return Ok(new { accessToken });
+            var newrefreshToken = GenerateRefreshToken();
+            _authService.SetRefreshTokenToUser(user.UserId, newrefreshToken.Token, newrefreshToken.Created, newrefreshToken.Expires);
+            string refreshToken = newrefreshToken.Token;
+            return Ok(new { accessToken, refreshToken });
         }
 
         [HttpPost("RefreshToken")]
-        public ActionResult<string> RefreshToken(string email)
+        public ActionResult<string> RefreshToken(string email, string refreshToken)
         {
             if (!_authService.UserExists(email))
             {
                 return BadRequest("User not exist");
             }
             var user = _authService.GetUserByEmail(email);
-            var refreshToken = Request.Cookies["refreshToken"];
             if (!user.RefreshToken.Equals(refreshToken))
             {
                 return Unauthorized("Invalid refresh token.");
@@ -72,9 +73,9 @@ namespace PersonalFinanceApp.API.Controllers
             }
             string accessToken = _authService.CreateToken(user);
             var newRefreshToken = GenerateRefreshToken();
-            var userId = user.UserId;
-            SetRefreshToken(newRefreshToken, userId);
-            return Ok(new { accessToken });
+            _authService.SetRefreshTokenToUser(user.UserId, newRefreshToken.Token, newRefreshToken.Created, newRefreshToken.Expires);
+            refreshToken = newRefreshToken.Token;
+            return Ok(new { accessToken, refreshToken});
         }
 
         private static RefreshToken GenerateRefreshToken()

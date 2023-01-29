@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,10 @@ namespace PersonalFinanceApp.Repository.Entities
         public int IncomeId { get; set; }
         public int IncomeCategoryId { get; set; }
         public int UserId { get; set; }
-        public string Price { get; set; }
+        [Precision(18, 2)]
+        public decimal Amount { get; set; }
         public string Comment { get; set; }
+        public DateTime Date { get; set; }
+        public virtual IncomeCategory IncomeCategory { get; set; }
     }
 }

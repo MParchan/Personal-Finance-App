@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace PersonalFinanceApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class IncomesController : ControllerBase
     {
         private readonly IIncomeService _incomeService;
@@ -83,6 +85,8 @@ namespace PersonalFinanceApp.API.Controllers
         [HttpPost]
         public ActionResult<IncomeViewModel> PostIncome(string email, IncomeViewModel income)
         {
+            Console.WriteLine(income.IncomeCategoryId);
+            Console.WriteLine(income.Comment);
             _incomeService.AddIncome(email, _mapper.Map<IncomeDto>(income));
 
             return CreatedAtAction("GetIncome", new { id = income.IncomeId }, income);

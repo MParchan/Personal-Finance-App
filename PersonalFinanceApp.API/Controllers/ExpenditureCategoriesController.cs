@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ namespace PersonalFinanceApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ExpenditureCategoriesController : ControllerBase
     {
         private readonly IExpenditureCategoryService _expenditureCategoryService;
@@ -81,7 +83,7 @@ namespace PersonalFinanceApp.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ExpenditureCategoryViewModel> PostExpenditureCategory(string email, ExpenditureCategoryViewModel expenditureCategory)
+        public ActionResult<ExpenditureCategoryViewModel> PostExpenditureCategory(ExpenditureCategoryViewModel expenditureCategory, string email)
         {
             _expenditureCategoryService.AddExpenditureCategory(email, _mapper.Map<ExpenditureCategoryDto>(expenditureCategory));
 

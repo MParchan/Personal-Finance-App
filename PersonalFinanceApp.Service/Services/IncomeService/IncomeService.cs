@@ -49,6 +49,7 @@ namespace PersonalFinanceApp.Service.Services.IncomeService
             {
                 income.UserId = _authService.GetUserIdByEmail(email);
             }
+            income.Date = DateTime.Now;
             _incomeRepository.Add(_mapper.Map<Income>(income));
         }
         public void RemoveIncome(int id)

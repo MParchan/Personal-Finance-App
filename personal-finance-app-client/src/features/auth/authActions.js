@@ -37,15 +37,23 @@ export const userLogin = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const { data } = await axios.post(
-        API_URL + "/Login",
-        { email, password },
-        config
-      );
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + data.accessToken;
-      const token = jwtDecode(data.accessToken);
-      return token;
+      const response = await axios
+        .post(API_URL + "/Login", { email, password }, config)
+        .then((response) => {
+          return response.data;
+        });
+
+      const decodeAccessToken = jwtDecode(response.accessToken);
+      const emailFromToken =
+        decodeAccessToken[
+          ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
+        ];
+      const data = {
+        email: emailFromToken,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      };
+      return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -54,25 +62,29 @@ export const userLogin = createAsyncThunk(
 
 export const userRefreshToken = createAsyncThunk(
   "auth/refreshToken",
-  async ({ email }, { rejectWithValue }) => {
+  async ({ email, refreshToken }, { rejectWithValue }) => {
     try {
-      const config = {
+      /*const config = {
         headers: {
           "Content-Type": "application/json",
         },
+      };*/
+      const bodyParameters = {
+        params: { email, refreshToken },
       };
-      const { data } = await axios.post(
-        API_URL + "/RefreshToken",
-        { email },
-        config
-      );
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + data.accessToken;
-      const token = jwtDecode(data.accessToken);
-      return token[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-      ];
+      const response = await axios
+        .post(API_URL + "/RefreshToken", {}, bodyParameters)
+        .then((response) => {
+          return response.data;
+        });
+      const data = {
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      };
+      console.log(data);
+      return data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data);
     }
   }

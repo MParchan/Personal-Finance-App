@@ -49,6 +49,7 @@ namespace PersonalFinanceApp.Service.Services.ExpenditureService
             {
                 expenditure.UserId = _authService.GetUserIdByEmail(email);
             }
+            expenditure.Date = DateTime.Now;
             _expenditureRepository.Add(_mapper.Map<Expenditure>(expenditure));
         }
         public void RemoveExpenditure(int id)

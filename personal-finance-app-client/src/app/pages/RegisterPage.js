@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { userRegistration } from "../../features/auth/authActions";
-import { resetRegistration } from "../../features/auth/authSlice";
+import { resetAuth } from "../../features/auth/authSlice";
 
 function RegisterPage() {
   const { loading, registerError, registerSuccess } = useSelector(
@@ -15,15 +15,14 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(resetRegistration());
+    dispatch(resetAuth());
   }, [dispatch]);
 
   useEffect(() => {
     if (registerSuccess && !loading) {
       navigate("/login");
-      dispatch(resetRegistration());
     }
-  }, [navigate, registerSuccess, loading, dispatch]);
+  }, [navigate, registerSuccess, loading]);
 
   const handleRegistration = (data) => {
     dispatch(userRegistration(data));

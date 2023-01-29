@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "https://localhost:7140/api/IncomeCategories";
+const API_URL = "https://localhost:7140/api/ExpenditureCategories";
 
-export const getUserIncomeCategories = createAsyncThunk(
-  "incomeCategories/getUserCategories",
+export const getUserExpenditureCategories = createAsyncThunk(
+  "expenditureCategories/getUserCategories",
   async ({ email, token }, { rejectWithValue }) => {
     try {
       axios.defaults.headers.common = { Authorization: "Bearer " + token };
@@ -12,7 +12,7 @@ export const getUserIncomeCategories = createAsyncThunk(
         params: { email },
       };
       return axios
-        .get(API_URL + "/UserIncomeCategories", bodyParameters)
+        .get(API_URL + "/UserExpenditureCategories", bodyParameters)
         .then((response) => response.data);
     } catch (error) {
       return rejectWithValue(error.response.data);

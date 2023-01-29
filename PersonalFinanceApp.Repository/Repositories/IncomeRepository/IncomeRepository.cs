@@ -1,4 +1,5 @@
-﻿using PersonalFinanceApp.Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonalFinanceApp.Repository.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace PersonalFinanceApp.Repository.Repositories.IncomeRepository
         }
         public IEnumerable<Income> GetUserIncomes(int id)
         {
-            return _context.Incomes.Where(i => i.UserId == -1 || i.UserId == id);
+            return _context.Incomes.Where(i => i.UserId == -1 || i.UserId == id).Include(i => i.IncomeCategory);
         }
         public bool Exists(int id)
         {

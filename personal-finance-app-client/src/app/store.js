@@ -1,13 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import authReducer from "../features/auth/authSlice";
-import incomeCategoriesReducer from "../features/incomeCategories/incomeCategoriesSlice";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
 const reducers = combineReducers({
   auth: authReducer,
-  incomeCategories: incomeCategoriesReducer,
 });
 
 const persistConfig = {
@@ -22,3 +20,5 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== "production",
   middleware: [thunk],
 });
+
+//export const persistor = persistStore(store);

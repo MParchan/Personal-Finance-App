@@ -9,10 +9,11 @@ import {
 const initialState = {
   loading: false,
   userEmail: null,
-  tokenExp: null,
+  accessToken: null,
+  refreshToken: null,
   registerError: null,
-  loginError: null,
   registerSuccess: false,
+  loginError: null,
   logged: false,
 };
 
@@ -20,12 +21,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    resetRegistration(state) {
+    resetAuth(state) {
+      state.loading = false;
+      state.userEmail = null;
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.loginError = null;
       state.registerError = null;
       state.registerSuccess = false;
-    },
-    resetLogin(state) {
-      state.loginError = null;
+      state.logged = false;
     },
   },
   extraReducers: (builder) => {
@@ -50,13 +54,11 @@ const authSlice = createSlice({
         state.loginError = null;
       })
       .addCase(userLogin.fulfilled, (state, { payload }) => {
-        state.loading = false;
         state.logged = true;
-        state.userEmail =
-          payload[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-          ];
-        state.tokenExp = payload["exp"];
+        state.userEmail = payload.email;
+        state.accessToken = payload.accessToken;
+        state.refreshToken = payload.refreshToken;
+        state.loading = false;
       })
       .addCase(userLogin.rejected, (state, { payload }) => {
         state.loading = false;
@@ -71,7 +73,8 @@ const authSlice = createSlice({
       .addCase(userRefreshToken.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.logged = true;
-        state.userEmail = payload;
+        state.accessToken = payload.accessToken;
+        state.refreshToken = payload.refreshToken;
       })
       .addCase(userRefreshToken.rejected, (state, { payload }) => {
         state.loading = false;
@@ -83,9 +86,11 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(userLogout.fulfilled, (state) => {
-        state.loading = false;
-        state.logged = false;
         state.userEmail = null;
+        state.accessToken = null;
+        state.refreshToken = null;
+        state.logged = false;
+        state.loading = false;
       })
       .addCase(userLogout.rejected, (state) => {
         state.loading = false;
@@ -95,5 +100,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetRegistration, resetLogin } = authSlice.actions;
+export const { resetAuth } = authSlice.actions;
 export default authSlice.reducer;

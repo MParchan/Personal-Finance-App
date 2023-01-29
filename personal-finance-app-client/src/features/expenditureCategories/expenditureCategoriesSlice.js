@@ -1,20 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserIncomeCategories } from "./incomeCategoriesActions";
+import { getUserExpenditureCategories } from "./expenditureCategoriesActions";
 
 const initialState = {
   loading: false,
-  incomeCategories: [],
+  expenditureCategories: [],
   error: null,
   success: false,
 };
 
-const incomeCategoriesSlice = createSlice({
-  name: "incomeCategories",
+const expenditureCategoriesSlice = createSlice({
+  name: "expenditureCategories",
   initialState,
   reducers: {
-    resetIncomeCategories(state) {
+    resetExpenditureCategories(state) {
       state.loading = false;
-      state.incomeCategories = [];
+      state.expenditureCategories = [];
       state.error = null;
       state.success = false;
     },
@@ -22,20 +22,20 @@ const incomeCategoriesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       //get income categories
-      .addCase(getUserIncomeCategories.pending, (state) => {
+      .addCase(getUserExpenditureCategories.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.incomeCategories = [];
         state.success = false;
       })
-      .addCase(getUserIncomeCategories.fulfilled, (state, { payload }) => {
+      .addCase(getUserExpenditureCategories.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.incomeCategories = payload;
         state.success = true;
       })
-      .addCase(getUserIncomeCategories.rejected, (state, { error }) => {
+      .addCase(getUserExpenditureCategories.rejected, (state, { error }) => {
         state.loading = false;
-        state.incomeCategories = [];
+        state.expenditureCategories = [];
         state.success = false;
         state.error = error.message;
       })
@@ -44,5 +44,6 @@ const incomeCategoriesSlice = createSlice({
   },
 });
 
-export const { resetIncomeCategories } = incomeCategoriesSlice.actions;
-export default incomeCategoriesSlice.reducer;
+export const { resetExpenditureCategories } =
+  expenditureCategoriesSlice.actions;
+export default expenditureCategoriesSlice.reducer;
