@@ -64,14 +64,6 @@ export const userRefreshToken = createAsyncThunk(
   "auth/refreshToken",
   async ({ accessToken, refreshToken }, { rejectWithValue }) => {
     try {
-      /*const bodyParameters = {
-        params: { email, refreshToken },
-      };
-      const response = await axios
-        .post(API_URL + "/RefreshToken", {}, bodyParameters)
-        .then((response) => {
-          return response.data;
-        });*/
       const data = {
         accessToken: accessToken,
         refreshToken: refreshToken,

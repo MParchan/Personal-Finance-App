@@ -117,6 +117,120 @@ namespace PersonalFinanceApp.Repository.Data
                 context.ExpenditureCategories.Add(ec);
             }
             context.SaveChanges();
+
+            var incomes = new Income[]
+            {
+                new Income
+                {
+                    IncomeCategoryId=1,
+                    UserId=1,
+                    Amount= 3500,
+                    Comment="Salary lol",
+                    Date = new DateTime(2023, 1, 1),
+                },
+                new Income
+                {
+                    IncomeCategoryId=1,
+                    UserId=1,
+                    Amount= 3900,
+                    Comment="Salary",
+                    Date = new DateTime(2022, 12, 1),
+                },
+                new Income
+                {
+                    IncomeCategoryId=2,
+                    UserId=1,
+                    Amount= 1200,
+                    Comment="Pension",
+                    Date = new DateTime(2022, 7, 13),
+                },
+                new Income
+                {
+                    IncomeCategoryId=6,
+                    UserId=1,
+                    Amount= 2000,
+                    Comment="investments",
+                    Date = new DateTime(2023, 1, 30),
+                },
+                new Income
+                {
+                    IncomeCategoryId=6,
+                    UserId=1,
+                    Amount= 2000,
+                    Comment="investments",
+                    Date = new DateTime(2022, 11, 10),
+                },
+                new Income
+                {
+                    IncomeCategoryId=1,
+                    UserId=1,
+                    Amount= 1000,
+                    Comment="Salary",
+                    Date = new DateTime(2022, 03, 1),
+                },
+            };
+            foreach (Income i in incomes)
+            {
+                context.Incomes.Add(i);
+            }
+            context.SaveChanges();
+
+            var expenditures = new Expenditure[]
+            {
+                new Expenditure
+                {
+                    ExpenditureCategoryId=1,
+                    UserId=1,
+                    Amount= 1599.99M,
+                    Comment="bills",
+                    Date = new DateTime(2023, 1, 13),
+                },
+                new Expenditure
+                {
+                    ExpenditureCategoryId=1,
+                    UserId=2,
+                    Amount= 5000,
+                    Comment="Salary",
+                    Date = new DateTime(2023, 12, 1),
+                },
+                new Expenditure
+                {
+                    ExpenditureCategoryId=2,
+                    UserId=1,
+                    Amount= 150,
+                    Comment="Kebab",
+                    Date = new DateTime(2022, 2, 1),
+                },
+                new Expenditure
+                {
+                    ExpenditureCategoryId=3,
+                    UserId=1,
+                    Amount= 320.5M,
+                    Comment="taxi",
+                    Date = new DateTime(2022, 1, 16),
+                },
+                new Expenditure
+                {
+                    ExpenditureCategoryId=3,
+                    UserId=1,
+                    Amount= 580.4M,
+                    Comment="uber",
+                    Date = new DateTime(2022, 10, 10),
+                },
+                new Expenditure
+                {
+                    ExpenditureCategoryId=1,
+                    UserId=1,
+                    Amount= 3001.55M,
+                    Comment="Salary",
+                    Date = new DateTime(2022, 09, 18),
+                },
+            };
+            foreach (Expenditure e in expenditures)
+            {
+                context.Expenditures.Add(e);
+            }
+            context.SaveChanges();
         }
     }
 }
