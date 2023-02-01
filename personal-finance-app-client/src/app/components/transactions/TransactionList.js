@@ -19,7 +19,7 @@ import { getTransactions } from "./getTransactions";
 import TransactionItem from "./TransactionItem";
 
 function TransactionList(props) {
-  const { userEmail, accessToken } = useSelector((state) => state.auth);
+  const { userEmail } = useSelector((state) => state.auth);
   const [loadedTransactions, setLoadedTransactions] = useState([]);
   const [listOfTransactions, setListOFTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,17 +29,13 @@ function TransactionList(props) {
   const [orderBy, setOrderBy] = useState("date");
 
   useEffect(() => {
-    const userData = {
-      email: userEmail,
-      accessToken: accessToken,
-    };
     const params = {
-      userData: userData,
+      email: userEmail,
       setLoading: setLoading,
       setLoadedTransactions: setLoadedTransactions,
     };
     getTransactions(params);
-  }, [accessToken, userEmail]);
+  }, [userEmail]);
 
   useEffect(() => {
     var min = 0;

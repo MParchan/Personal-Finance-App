@@ -1,8 +1,7 @@
-import { getUserExpenditures } from "../../../api/expenditureService";
-import { getUserIncomes } from "../../../api/incomeService";
+import { getUserExpenditures, getUserIncomes } from "../../../api/service";
 
 export const getTransactions = (props) => {
-  getUserIncomes(props.userData)
+  getUserIncomes(props.email)
     .then((response) => {
       return response.data;
     })
@@ -22,7 +21,7 @@ export const getTransactions = (props) => {
         key++;
         transactions.push(transaction);
       }
-      getUserExpenditures(props.userData)
+      getUserExpenditures(props.email)
         .then((response) => {
           return response.data;
         })

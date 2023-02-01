@@ -1,25 +1,18 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import { addIncomeCategorie } from "../../../api/incomeCategoryService";
+import { useSelector } from "react-redux";
+import { addIncomeCategorie } from "../../../api/service";
 
-export const AddIncomeCategoryForm = ({
-  email,
-  accessToken,
-  handleCloseCategory,
-}) => {
+export const AddIncomeCategoryForm = ({ handleCloseCategory }) => {
   const [name, setName] = useState("");
+  const { userEmail } = useSelector((state) => state.auth);
 
   const handleForm = async (e) => {
     e.preventDefault();
     const newCategory = {
       name: name,
     };
-    const data = {
-      email: email,
-      accessToken: accessToken,
-      newCategory: newCategory,
-    };
-    const response = await addIncomeCategorie(data);
+    const response = await addIncomeCategorie(userEmail, newCategory);
     if (response.status === 201) {
       handleCloseCategory();
     }

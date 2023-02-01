@@ -1,42 +1,93 @@
 import axios from "axios";
-import dayjs from "dayjs";
-import jwtDecode from "jwt-decode";
-import { userRefreshToken } from "../features/auth/authActions";
+import { userLogout, userRefreshToken } from "../features/auth/authActions";
+import { store } from "../app/store";
+import { Navigate } from "react-router-dom";
 
 const baseURL = "https://localhost:7140/api";
 
-let accessToken;
-let dispatch;
-let refreshToken;
-
-export const setProperties = (props) => {
-  accessToken = props.accessToken;
-  refreshToken = props.refreshToken;
-  dispatch = props.dispatch;
-};
+let isRefreshing = false;
+let failedQueue = [];
 
 export const axiosInstance = axios.create({
   baseURL,
 });
 
-axiosInstance.interceptors.request.use(async (req) => {
-  req.headers.Authorization = "Bearer " + accessToken;
-  const token = jwtDecode(accessToken);
-  const isExpired = dayjs.unix(token.exp).diff(dayjs()) < 1;
-  if (!isExpired) {
-    return req;
-  } else {
-    const data = {
-      email:
-        token[
-          ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]
-        ],
-      refreshToken: refreshToken,
-    };
-    const response = await dispatch(userRefreshToken(data));
-    console.log(response);
-    return req;
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
+axiosInstance.interceptors.response.use(
+  async (response) => {
+    return response;
+  },
+  async (err) => {
+    const originalRequest = err.config;
+
+    if (err.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        try {
+          const token = await new Promise(function (resolve, reject) {
+            failedQueue.push({ resolve, reject });
+          });
+          originalRequest.headers["Authorization"] = "Bearer " + token;
+          return await axios(originalRequest);
+        } catch (err_1) {
+          return await Promise.reject(err_1);
+        }
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+      const state = store.getState().auth;
+      const email = state.userEmail;
+      const refreshToken = state.refreshToken;
+      const accessToken = state.accessToken;
+      axios.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
+      const bodyParameters = {
+        params: { email, refreshToken },
+      };
+      return new Promise(async function (resolve, reject) {
+        await axios
+          .post(baseURL + "/Auth/RefreshToken", {}, bodyParameters)
+          .then((response) => {
+            return response.data;
+          })
+          .then((data) => {
+            axiosInstance.defaults.headers.common["Authorization"] =
+              "Bearer " + data.accessToken;
+            originalRequest.headers["Authorization"] =
+              "Bearer " + data.accessToken;
+            const dataToken = {
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            };
+            store.dispatch(userRefreshToken(dataToken));
+            processQueue(null, data.accessToken);
+            resolve(axios(originalRequest));
+          })
+          .catch((err) => {
+            delete axiosInstance.defaults.headers.common["Authorization"];
+            delete axios.defaults.headers.common["Authorization"];
+            store.dispatch(userLogout());
+            <Navigate to={"/login"} />;
+            processQueue(err, null);
+            reject(err);
+          })
+          .then(() => {
+            isRefreshing = false;
+          });
+      });
+    }
+    return Promise.reject(err);
   }
-});
+);
 
 export default axiosInstance;

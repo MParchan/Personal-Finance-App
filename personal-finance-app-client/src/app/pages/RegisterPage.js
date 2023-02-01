@@ -31,7 +31,7 @@ function RegisterPage() {
   return (
     <div className="text-center">
       <form onSubmit={handleSubmit(handleRegistration)}>
-        <h1 className="m-5">Registration</h1>
+        <p className="m-5 display-5">Registration</p>
         <div className="m-3">
           <TextField
             type="email"

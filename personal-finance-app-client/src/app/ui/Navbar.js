@@ -10,8 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../features/auth/authActions";
-import { resetExpenditureCategories } from "../../features/expenditureCategories/expenditureCategoriesSlice";
-import { resetIncomeCategories } from "../../features/incomeCategories/incomeCategoriesSlice";
 
 export default function Navbar() {
   const { logged } = useSelector((state) => state.auth);
@@ -19,8 +17,6 @@ export default function Navbar() {
 
   const logoutHandler = () => {
     dispatch(userLogout());
-    dispatch(resetExpenditureCategories());
-    dispatch(resetIncomeCategories());
   };
 
   return (
@@ -54,8 +50,6 @@ export default function Navbar() {
                 Transaction history
               </Button>
               <Button
-                component={Link}
-                to={"/"}
                 onClick={logoutHandler}
                 style={{ color: "inherit", textDecoration: "inherit" }}
               >

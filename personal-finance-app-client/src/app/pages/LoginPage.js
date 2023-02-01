@@ -21,7 +21,7 @@ function LoginPage() {
   return (
     <div className="text-center">
       <form onSubmit={handleSubmit(handleLogin)}>
-        <h1 className="m-5">Login</h1>
+        <p className="m-5 display-5">Login</p>
         <div className="m-3">
           <TextField
             label="Email"

@@ -62,26 +62,20 @@ export const userLogin = createAsyncThunk(
 
 export const userRefreshToken = createAsyncThunk(
   "auth/refreshToken",
-  async ({ email, refreshToken }, { rejectWithValue }) => {
+  async ({ accessToken, refreshToken }, { rejectWithValue }) => {
     try {
-      /*const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };*/
-      const bodyParameters = {
+      /*const bodyParameters = {
         params: { email, refreshToken },
       };
       const response = await axios
         .post(API_URL + "/RefreshToken", {}, bodyParameters)
         .then((response) => {
           return response.data;
-        });
+        });*/
       const data = {
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
       };
-      console.log(data);
       return data;
     } catch (error) {
       console.log(error);

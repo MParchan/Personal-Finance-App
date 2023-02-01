@@ -6,7 +6,6 @@ import {
   Select,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { getTransactions } from "./getTransactions";
 import React from "react";
 import {
@@ -19,6 +18,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useSelector } from "react-redux";
 
 ChartJS.register(
   CategoryScale,
@@ -58,7 +58,7 @@ const labels = [
 ];
 
 function TransactionsChart() {
-  const { userEmail, accessToken } = useSelector((state) => state.auth);
+  const { userEmail } = useSelector((state) => state.auth);
   const [loadedTransactions, setLoadedTransactions] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [yearsList, setYearsList] = useState([]);
@@ -66,17 +66,13 @@ function TransactionsChart() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userData = {
-      email: userEmail,
-      accessToken: accessToken,
-    };
     const params = {
-      userData: userData,
+      email: userEmail,
       setLoading: setLoading,
       setLoadedTransactions: setLoadedTransactions,
     };
     getTransactions(params);
-  }, [accessToken, userEmail]);
+  }, [userEmail]);
 
   useEffect(() => {
     var minDate = new Date();

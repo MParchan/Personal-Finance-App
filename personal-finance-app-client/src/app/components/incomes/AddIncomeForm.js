@@ -10,14 +10,12 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserIncomeCategories } from "../../../api/incomeCategoryService";
-import { addIncome } from "../../../api/incomeService";
+import { useSelector } from "react-redux";
+import { addIncome, getUserIncomeCategories } from "../../../api/service";
 import { AddIncomeCategoryForm } from "./AddIncomeCategoryForm";
 
 function AddIncomeForm() {
-  const { userEmail, accessToken } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const { userEmail } = useSelector((state) => state.auth);
   const [userIncomecategories, setUserIncomeCategories] = useState([]);
   const [incomeCategory, setIncomeCategory] = useState("");
   const [comment, setComment] = useState("");
@@ -28,11 +26,7 @@ function AddIncomeForm() {
   const [openCategory, setOpenCategory] = useState(false);
 
   useEffect(() => {
-    const data = {
-      email: userEmail,
-      accessToken: accessToken,
-    };
-    getUserIncomeCategories(data).then((data) => {
+    getUserIncomeCategories(userEmail).then((data) => {
       const categories = [];
       for (const key in data) {
         const category = {
@@ -44,7 +38,7 @@ function AddIncomeForm() {
       setUserIncomeCategories(categories);
       setLoading(false);
     });
-  }, [accessToken, dispatch, userEmail, openCategory]);
+  }, [openCategory, userEmail]);
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -54,12 +48,7 @@ function AddIncomeForm() {
       comment: comment,
       userId: -1,
     };
-    const data = {
-      email: userEmail,
-      income: newIncome,
-      accessToken: accessToken,
-    };
-    addIncome(data)
+    addIncome(userEmail, newIncome)
       .then((response) => {
         if (response.status === 201) {
           setAmount("");
@@ -180,11 +169,7 @@ function AddIncomeForm() {
         </Snackbar>
       </form>
       <Dialog open={openCategory} onClose={handleCloseCategory}>
-        <AddIncomeCategoryForm
-          handleCloseCategory={handleCloseCategory}
-          email={userEmail}
-          accessToken={accessToken}
-        />
+        <AddIncomeCategoryForm handleCloseCategory={handleCloseCategory} />
       </Dialog>
     </div>
   );

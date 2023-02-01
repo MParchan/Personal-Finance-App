@@ -10,14 +10,15 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserExpenditureCategories } from "../../../api/expenditureCategoryService";
-import { addExpenditure } from "../../../api/expenditureService";
+import { useSelector } from "react-redux";
+import {
+  addExpenditure,
+  getUserExpenditureCategories,
+} from "../../../api/service";
 import { AddExpenditureCategoryForm } from "./AddExpenditureCategoryForm";
 
-function AddExpenditureForm(props) {
-  const { userEmail, accessToken } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+function AddExpenditureForm() {
+  const { userEmail } = useSelector((state) => state.auth);
   const [userExpenditurecategories, setUserExpenditureCategories] = useState(
     []
   );
@@ -30,11 +31,7 @@ function AddExpenditureForm(props) {
   const [openCategory, setOpenCategory] = useState(false);
 
   useEffect(() => {
-    const data = {
-      email: userEmail,
-      accessToken: accessToken,
-    };
-    getUserExpenditureCategories(data).then((data) => {
+    getUserExpenditureCategories(userEmail).then((data) => {
       const categories = [];
       for (const key in data) {
         const category = {
@@ -46,7 +43,7 @@ function AddExpenditureForm(props) {
       setUserExpenditureCategories(categories);
       setLoading(false);
     });
-  }, [accessToken, dispatch, userEmail, openCategory]);
+  }, [openCategory, userEmail]);
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -56,12 +53,7 @@ function AddExpenditureForm(props) {
       comment: comment,
       userId: -1,
     };
-    const data = {
-      email: userEmail,
-      expenditure: newExpenditure,
-      accessToken: accessToken,
-    };
-    addExpenditure(data)
+    addExpenditure(userEmail, newExpenditure)
       .then((response) => {
         if (response.status === 201) {
           setAmount("");
@@ -184,11 +176,7 @@ function AddExpenditureForm(props) {
         </Snackbar>
       </form>
       <Dialog open={openCategory} onClose={handleCloseCategory}>
-        <AddExpenditureCategoryForm
-          handleCloseCategory={handleCloseCategory}
-          email={userEmail}
-          accessToken={accessToken}
-        />
+        <AddExpenditureCategoryForm handleCloseCategory={handleCloseCategory} />
       </Dialog>
     </div>
   );
