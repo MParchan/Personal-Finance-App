@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { addIncome, getUserIncomeCategories } from "../../../api/service";
 import { AddIncomeCategoryForm } from "./AddIncomeCategoryForm";
 
-function AddIncomeForm() {
+function AddIncomeForm(props) {
   const { userEmail } = useSelector((state) => state.auth);
   const [userIncomecategories, setUserIncomeCategories] = useState([]);
   const [incomeCategory, setIncomeCategory] = useState("");
@@ -55,6 +55,7 @@ function AddIncomeForm() {
           setIncomeCategory("");
           setComment("");
           setOpenSnackSuccess(true);
+          props.setReload(true);
         } else {
           setOpenSnackError(true);
         }

@@ -50,7 +50,7 @@ function TransactionHistoryPage() {
           <b className="text-danger"> -${expenditure}</b>
         </p>
         <p>
-          Bilans:
+          Balance:
           {income - expenditure > 0 ? (
             <b className="text-success">
               {" "}

@@ -57,7 +57,7 @@ const labels = [
   "December",
 ];
 
-function TransactionsChart() {
+function TransactionsChart(props) {
   const { userEmail } = useSelector((state) => state.auth);
   const [loadedTransactions, setLoadedTransactions] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -72,7 +72,7 @@ function TransactionsChart() {
       setLoadedTransactions: setLoadedTransactions,
     };
     getTransactions(params);
-  }, [userEmail]);
+  }, [userEmail, props.reload]);
 
   useEffect(() => {
     var minDate = new Date();

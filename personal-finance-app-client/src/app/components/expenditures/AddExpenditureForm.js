@@ -17,7 +17,7 @@ import {
 } from "../../../api/service";
 import { AddExpenditureCategoryForm } from "./AddExpenditureCategoryForm";
 
-function AddExpenditureForm() {
+function AddExpenditureForm(props) {
   const { userEmail } = useSelector((state) => state.auth);
   const [userExpenditurecategories, setUserExpenditureCategories] = useState(
     []
@@ -60,6 +60,7 @@ function AddExpenditureForm() {
           setExpenditureCategory("");
           setComment("");
           setOpenSnackSuccess(true);
+          props.setReload(true);
         } else {
           setOpenSnackError(true);
         }
