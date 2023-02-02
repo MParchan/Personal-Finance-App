@@ -25,3 +25,5 @@
 * React
 * JSON Web Token
 * Redux
+## Database (MS SQL Server)
+![databasePersonalFinanceApp](https://user-images.githubusercontent.com/85680066/216328184-324012f1-9701-4fc6-b531-2771c0ca9729.png)
